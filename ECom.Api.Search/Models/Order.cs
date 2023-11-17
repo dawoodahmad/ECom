@@ -7,6 +7,5 @@
         public decimal Total { get; set; }
         public List<OrderItem> Items { get; set; }
 
-        public string ProductName { get; set; }
     }
 }

@@ -1,21 +1,42 @@
 ﻿using ECom.Api.Search.Interfaces;
 using ECom.Api.Search.Models;
+using System.Text.Json;
 
 namespace ECom.Api.Search.Services
 {
     public class ProductsService : IProductsService
     {
-        private IHttpClientFactory httpClientFactory;
-        private ILogger<ProductsService> logger;
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly ILogger<ProductsService> logger;
 
         public ProductsService(IHttpClientFactory httpClientFactory, ILogger<ProductsService> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.logger = logger;
         }
-        public Task<(bool IsSuccess, IEnumerable<Product>, string ErrorMessage)> GetProductsAsync()
+        public async Task<(bool IsSuccess, IEnumerable<Product> Products, string ErrorMessage)> GetProductsAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var client = httpClientFactory.CreateClient("ProductsService");
+                var response = await client.GetAsync("api/products");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+                    var result = JsonSerializer.Deserialize<IEnumerable<Product>>(content, options);
+
+                    return (true, result, null);
+                }
+
+                return (false, null, response.ReasonPhrase);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.ToString());
+                return (false, null, ex.ToString());
+            }
         }
     }
 }

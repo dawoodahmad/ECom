@@ -1,6 +1,7 @@
 using ECom.Api.Search.Interfaces;
 using ECom.Api.Search.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISearchService, SearchService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IProductsService, ProductsService>();
 
 builder.Services.AddHttpClient("OrdersService", conf =>
 {
@@ -24,7 +26,7 @@ builder.Services.AddHttpClient("OrdersService", conf =>
 builder.Services.AddHttpClient("ProductsService", conf =>
 {
     conf.BaseAddress = new Uri(_configuration.GetSection("Services").GetValue<string>("Products"));
-});
+}).AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(2, _ => TimeSpan.FromMilliseconds(500)));
 
 var app = builder.Build();
 

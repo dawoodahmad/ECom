@@ -5,12 +5,12 @@ using System.Text.Json;
 
 namespace ECom.Api.Search.Services
 {
-    public class OrderService : IOrderService
+    public class OrdersService : IOrdersService
     {
         private IHttpClientFactory httpClientFactory;
-        private ILogger<OrderService> logger;
+        private ILogger<OrdersService> logger;
 
-        public OrderService(IHttpClientFactory httpClientFactory, ILogger<OrderService> logger)
+        public OrdersService(IHttpClientFactory httpClientFactory, ILogger<OrdersService> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.logger = logger;
