@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<ICustomersService, CustomersService>();
 
 builder.Services.AddHttpClient("OrdersService", conf =>
 {
@@ -27,6 +28,12 @@ builder.Services.AddHttpClient("ProductsService", conf =>
 {
     conf.BaseAddress = new Uri(_configuration.GetSection("Services").GetValue<string>("Products"));
 }).AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(2, _ => TimeSpan.FromMilliseconds(500)));
+
+builder.Services.AddHttpClient("CustomersService", conf =>
+{
+    conf.BaseAddress = new Uri(_configuration.GetSection("Services").GetValue<string>("Customers"));
+});
+
 
 var app = builder.Build();
 
