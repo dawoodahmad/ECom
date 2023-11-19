@@ -61,7 +61,7 @@ namespace ECom.Api.Products.Providers
                 if (product != null)
                 {
                     var result = mapper.Map<Db.Product, Models.Product>(product);
-                    return (true, result, "");
+                    return (true, result, null);
                 }
                 return (false, null, "Not found");
             }
