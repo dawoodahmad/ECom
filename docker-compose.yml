@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  ecom.api.customers:
+    image: ${DOCKER_REGISTRY-}ecomapicustomers
+    build:
+      context: .
+      dockerfile: ECom.Api.Customers\Dockerfile
+
+  ecom.api.orders:
+    image: ${DOCKER_REGISTRY-}ecomapiorders
+    build:
+      context: .
+      dockerfile: ECom.Api.Orders\Dockerfile
+
+
+  ecom.api.products:
+    image: ${DOCKER_REGISTRY-}ecomapiproducts
+    build:
+      context: .
+      dockerfile: ECom.Api.Products\Dockerfile
+
+
+  ecom.api.products.tests:
+    image: ${DOCKER_REGISTRY-}ecomapiproductstests
+    build:
+      context: .
+      dockerfile: ECom.Api.Products.Tests\Dockerfile
+
+
+  ecom.api.search:
+    image: ${DOCKER_REGISTRY-}ecomapisearch
+    build:
+      context: .
+      dockerfile: ECom.Api.Search\Dockerfile
+
